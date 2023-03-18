@@ -1,24 +1,22 @@
 import Bar from "@/components/Bar";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import api from "../api/recruit.json"
-import myThinkState from "../../components/atom"
 
-export default function NewMember(){
+export default function NewMember({params}){
     const {register, handleSubmit} = useForm();
     const router = useRouter();
-    const id = router.query.param;
-    const data = api[id-1]
+    const data = api[Number(params)-1]
     console.log(data)
-
     /* const onValid = (think) => {
         setMyThink([...prev, think])
     } */
     return(<div>
         <Bar/>
-        <div className="grid grid-cols-2">
+        <div className="grid">
             <div className="flex flex-col items-center justify-center">
                 <div className="text-3xl ">
                     <span className="">
@@ -30,9 +28,19 @@ export default function NewMember(){
                         <div className="grid grid-cols-2"><span>성별 :</span> <span className="font-extrabold">{data.성별}</span> </div>
                         <div className="grid grid-cols-2"><span>학번 :</span> <span className="font-extrabold">{data.학번}</span></div>
                         <div className="grid grid-cols-2"><span>생년월일 :</span><span className="font-extrabold">{data.생년월일}</span></div>
-                        <div className="grid grid-cols-2"><span>GitHubId :</span> <span className="font-extrabold">{data.githubId}</span></div>
-                        <div className="grid grid-cols-2"><span>통학?긱사? :</span><span className="font-extrabold">{data.통학여부}</span></div>
-                        <div className="grid grid-cols-2"><span>깃허브아이디 : </span>  <span className="font-extrabold">{data.isFresh}</span></div>
+                        <div className="grid grid-cols-2">
+                            
+                            <span>GitHubId :</span> 
+                            <Link href={`https://github.com/${data.githubId}`}>
+                            <span className="font-extrabold">
+                            {data.githubId}
+                            
+                            </span>
+                            </Link>
+                            
+                        </div>
+                        <div className="grid grid-cols-2"><span>통학?긱사?</span><span className="font-extrabold">{data.통학여부}</span></div>
+                        <div className="grid grid-cols-2"><span>신입생?편입생? </span>  <span className="font-extrabold">{data.isFresh}</span></div>
                     </div>
                     <div className="flex flex-col justify-start space-y-5">
                         <div className="grid gap-2">
@@ -57,6 +65,12 @@ export default function NewMember(){
             
             
             
-        </div>
+        </div> 
     </div>)
 }
+
+export async function getServerSideProps({ params : {params} }) {
+    return {
+      props: { params },
+    };
+  }
