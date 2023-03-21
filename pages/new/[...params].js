@@ -16,7 +16,7 @@ export default function NewMember({params}){
     } */
     return(<div>
         <Bar/>
-        <div className="grid">
+        <div className="grid mt-10">
             <div className="flex flex-col items-center justify-center">
                 <div className="text-3xl ">
                     <span className="">
